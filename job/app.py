@@ -3,6 +3,7 @@ import os
 import pymongo
 import time
 from clients.twitter.api import TwitterAPI
+from dateutil.parser import parse
 
 
 BEARER_TOKEN = os.environ['BEARER_TOKEN']
@@ -36,7 +37,7 @@ while True:
         for tweet in tweets:
             tweet_id = tweet['id']
             tweet_text = tweet['text']
-            tweet_created_at = tweet['created_at'] 
+            tweet_hour_created_at = parse(tweet['created_at']).hour
             tweet_lang = tweet['lang']
             user_id = tweet['user']['id']
             user_name =  tweet['user']['name']
@@ -49,7 +50,7 @@ while True:
                         'tweet_hashtag': hashtag,
                         'tweet_id': tweet_id,
                         'tweet_text': tweet_text,
-                        'tweet_created_at': tweet_created_at,
+                        'tweet_hour_created_at': tweet_hour_created_at,
                         'tweet_lang': tweet_lang,
                     }).inserted_id
 
