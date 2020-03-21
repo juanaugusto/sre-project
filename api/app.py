@@ -1,6 +1,7 @@
 import bson
 import os
 import pymongo
+from bson.son import SON
 from flask import Flask
 from flask import jsonify
 
@@ -24,7 +25,6 @@ def what_users_with_most_followers():
     # Quais são os 5 (cinco) usuários, da 
     # amostra coletada, que possuem mais
     # seguidores?
-    # db.getCollection('users').find().sort( { user_followers_count: -1 } ).limit(5)
 
     users = users_collection.find() \
                 .sort([('user_followers_count', pymongo.DESCENDING)]) \
@@ -37,12 +37,21 @@ def what_users_with_most_followers():
 
     return jsonify({'users': users})
 
-@app.route("/total/tweets/hour/<int:year>/<int:month>/<int:day>")
-def total_tweets_per_hour(year, month, day):
+@app.route("/total/tweets/hour")
+def total_tweets_per_hour():
+    # Sat Mar 21 16:00:50 +0000 2020
     # Qual o total de postagens, agrupadas
     # por hora do dia (independentemente da
     # hashtag)?
-    return "Hello, Wolddd!"
+    
+    hours = tweets_collection.aggregate([
+        {"$group": {"_id": "$tweet_hour_created_at", "count": {"$sum": 1}}},
+        {"$sort": SON([("_id", +1)])}        
+    ])
+
+    hours = [{'hour': hour['_id'], 'count': hour['count']} for hour in hours]
+
+    return jsonify({'hours': hours})
 
 @app.route("/total/tweets/hashtag/language/location/<user_name>")
 def total_tweets_per_hashtag_and_language_location(user_name):
