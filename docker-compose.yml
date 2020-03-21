@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+
+  job:
+    build: ${PWD}/job
+    command: python /app/app.py
+    volumes:
+      - ${PWD}/job:/app
+      - ${PWD}/clients:/app/clients
+    depends_on:
+      - mongo-twitter
+    environment: 
+      BEARER_TOKEN: "${BEARER_TOKEN}"
+      HASHTAGS: "${HASHTAGS}"
+      MONGO_ROOT_USERNAME: "${MONGO_ROOT_USERNAME}"
+      MONGO_ROOT_PASSWORD: "${MONGO_ROOT_PASSWORD}"
+      MONGO_HOST: "mongo-twitter"
+
+  mongo-twitter:
+    image: mongo:4.2.3
+    volumes: 
+      - ${PWD}/mongo_twitter_data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: "${MONGO_ROOT_USERNAME}"
+      MONGO_INITDB_ROOT_PASSWORD: "${MONGO_ROOT_PASSWORD}"
+    ports:
+      - "27017:27017"
