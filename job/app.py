@@ -1,3 +1,4 @@
+import bson
 import os
 import pymongo
 import time
@@ -16,7 +17,9 @@ mongo_client = pymongo.MongoClient('mongodb://%s:%s@%s:27017/admin' %
                                     (MONGO_ROOT_USERNAME, 
                                      MONGO_ROOT_PASSWORD, 
                                      MONGO_HOST))
-mongo_collection = mongo_client.twitterDB.tweets
+
+tweets_collection = mongo_client.twitterDB.tweets
+users_collection = mongo_client.twitterDB.users
 
 twitter_api = TwitterAPI(BEARER_TOKEN)
 
@@ -41,18 +44,34 @@ while True:
             user_location = tweet['user']['location']
 
             try:
-                if mongo_collection.find_one({'tweet_id': tweet_id}) is None:
-                    mongo_collection.insert_one({
+                if tweets_collection.find_one({'tweet_id': tweet_id}) is None:
+                    tweet_object_id = tweets_collection.insert_one({
                         'tweet_hashtag': hashtag,
                         'tweet_id': tweet_id,
                         'tweet_text': tweet_text,
                         'tweet_created_at': tweet_created_at,
                         'tweet_lang': tweet_lang,
-                        'user_id': user_id,
-                        'user_name': user_name,
-                        'user_followers_count': user_followers_count,
-                        'user_location': user_location
-                    })
+                    }).inserted_id
+
+                    if users_collection.find_one({'user_id': user_id}) is None:
+                        users_collection.insert_one({
+                            'user_id': user_id,
+                            'user_name': user_name,
+                            'user_followers_count': user_followers_count,
+                            'user_location': user_location,
+                            'tweets': []
+                        })
+
+                    user = users_collection.find_one({'user_id': user_id})
+                    user_object_id = user['_id']
+                    del user['_id']
+                    user['tweets'] += [tweet_object_id]
+
+                    users_collection.find_one_and_update(
+                        {"_id": user_object_id}, 
+                        {"$set": user}, 
+                        upsert=True
+                    )
             except:
                 continue
 
