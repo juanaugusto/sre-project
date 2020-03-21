@@ -4,9 +4,10 @@ services:
 
   api:
     build: ${PWD}/api
-    command: flask run --host 0.0.0.0 
+    command: /bin/sh -c "service rsyslog start && flask run --host 0.0.0.0" 
     volumes:
       - ${PWD}/api:/app
+      - ${PWD}/api/graylog.conf:/etc/rsyslog.d/graylog.conf
     depends_on:
       - mongo-twitter
     environment:
@@ -41,3 +42,39 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: "${MONGO_ROOT_PASSWORD}"
     ports:
       - "27017:27017"
+
+  prometheus:
+    image: prom/prometheus:v2.16.0
+    ports:
+      - "9090:9090"
+    volumes: 
+      - ${PWD}/prometheus_data:/prometheus
+      - ${PWD}/prometheus.yml:/etc/prometheus/prometheus.yml
+
+  grafana:
+    image: grafana/grafana:6.7.1
+    ports:
+      - "3000:3000"
+    volumes:
+      - ${PWD}/grafana_data:/var/lib/grafana
+
+  graylog:
+    image: graylog/graylog:3.2
+    ports:
+      - "9000:9000"
+      - "12201:12201"
+      - "1514:1514"
+    environment: 
+      GRAYLOG_HTTP_EXTERNAL_URI: "http://127.0.0.1:9000/"
+    # links:
+    #   - "mongo_graylog"
+    #   - "elasticsearch_graylog"
+
+  mongo:
+    image: mongo:3.6.17
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.8.5
+    environment: 
+      http.host: "0.0.0.0"
+      ES_JAVA_OPTS: "-Xms512m -Xmx512m"
