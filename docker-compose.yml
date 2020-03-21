@@ -4,7 +4,7 @@ services:
 
   api:
     build: ${PWD}/api
-    command: flask run --host 0.0.0.0
+    command: flask run --host 0.0.0.0 
     volumes:
       - ${PWD}/api:/app
     depends_on:
@@ -14,7 +14,6 @@ services:
       MONGO_ROOT_PASSWORD: "${MONGO_ROOT_PASSWORD}"
       MONGO_HOST: "mongo-twitter"
       FLASK_APP: "/app/app.py"
-      FLASK_ENV: "development"
     ports:
       - "8080:5000"
 

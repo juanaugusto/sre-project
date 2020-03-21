@@ -4,6 +4,9 @@ import pymongo
 from bson.son import SON
 from flask import Flask
 from flask import jsonify
+from prometheus_client import make_wsgi_app
+from flask import request
+from prometheus_flask_exporter import PrometheusMetrics
 
 
 MONGO_ROOT_USERNAME = os.environ['MONGO_ROOT_USERNAME']
@@ -19,6 +22,8 @@ tweets_collection = mongo_client.twitterDB.tweets
 users_collection = mongo_client.twitterDB.users
 
 app = Flask(__name__)
+metrics = PrometheusMetrics(app)
+
 
 @app.route("/what/users/most/followers")
 def what_users_with_most_followers():
