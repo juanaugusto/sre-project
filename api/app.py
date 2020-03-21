@@ -61,7 +61,7 @@ def total_tweets_per_hashtag_and_language_location(user_id):
 
     user = users_collection.find_one({'user_id': user_id})
 
-    tweets = tweets_collection.aggregate([
+    results = tweets_collection.aggregate([
         {'$match': {'_id': {"$in": user['tweets']}}},
         {'$group': {"_id": {'tweet_hashtag': "$tweet_hashtag", 
                             'tweet_lang': "$tweet_lang"},
@@ -69,9 +69,9 @@ def total_tweets_per_hashtag_and_language_location(user_id):
         {"$sort": SON([("_id", +1)])}
     ])
         
-    counts = [{'tweet_info': {'tweet_hashtag': tweet['_id']['tweet_hashtag'], 
-                              'tweet_lang': tweet['_id']['tweet_lang'],
-               'count': tweet['count']}} 
-               for tweet in tweets]
+    counts = [{'tweet_info': {'tweet_hashtag': result['_id']['tweet_hashtag'], 
+                              'tweet_lang': result['_id']['tweet_lang'],
+               'count': result['count']}} 
+               for result in results]
 
     return jsonify({'infos': counts})
