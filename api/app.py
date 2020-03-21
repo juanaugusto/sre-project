@@ -53,9 +53,25 @@ def total_tweets_per_hour():
 
     return jsonify({'hours': hours})
 
-@app.route("/total/tweets/hashtag/language/location/<user_name>")
-def total_tweets_per_hashtag_and_language_location(user_name):
+@app.route("/total/tweets/hashtag/language/location/<int:user_id>")
+def total_tweets_per_hashtag_and_language_location(user_id):
     # Qual o total de postagens
     # para cada uma das #tag por idioma/país do
     # usuário que postou;
-    return "oi"
+
+    user = users_collection.find_one({'user_id': user_id})
+
+    tweets = tweets_collection.aggregate([
+        {'$match': {'_id': {"$in": user['tweets']}}},
+        {'$group': {"_id": {'tweet_hashtag': "$tweet_hashtag", 
+                            'tweet_lang': "$tweet_lang"},
+                    "count": {"$sum": 1}}},
+        {"$sort": SON([("_id", +1)])}
+    ])
+        
+    counts = [{'tweet_info': {'tweet_hashtag': tweet['_id']['tweet_hashtag'], 
+                              'tweet_lang': tweet['_id']['tweet_lang'],
+               'count': tweet['count']}} 
+               for tweet in tweets]
+
+    return jsonify({'infos': counts})
