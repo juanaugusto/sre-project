@@ -25,7 +25,10 @@ hashtags_array = HASHTAGS.split(';')
 while True:
 
     for hashtag in hashtags_array:
-        tweets = twitter_api.search_tweets(hashtag, 100)
+        try:
+            tweets = twitter_api.search_tweets(hashtag, 100)
+        except:
+            continue
 
         for tweet in tweets:
             tweet_id = tweet['id']
@@ -37,17 +40,21 @@ while True:
             user_followers_count = tweet['user']['followers_count']
             user_location = tweet['user']['location']
 
-            mongo_collection.insert_one({
-                'tweet_hashtag': hashtag,
-                'tweet_id': tweet_id,
-                'tweet_text': tweet_text,
-                'tweet_created_at': tweet_created_at,
-                'tweet_lang': tweet_lang,
-                'user_id': user_id,
-                'user_name': user_name,
-                'user_followers_count': user_followers_count,
-                'user_location': user_location
-            })
+            try:
+                if mongo_collection.find_one({'tweet_id': tweet_id}) is None:
+                    mongo_collection.insert_one({
+                        'tweet_hashtag': hashtag,
+                        'tweet_id': tweet_id,
+                        'tweet_text': tweet_text,
+                        'tweet_created_at': tweet_created_at,
+                        'tweet_lang': tweet_lang,
+                        'user_id': user_id,
+                        'user_name': user_name,
+                        'user_followers_count': user_followers_count,
+                        'user_location': user_location
+                    })
+            except:
+                continue
 
         time.sleep(2) # Wait 2 seconds before hit Twitter API
 
