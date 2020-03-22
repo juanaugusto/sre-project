@@ -8,7 +8,7 @@ class TwitterAPI:
         self.base_url = 'https://api.twitter.com/1.1'
         self.bearer_token = bearer_token
 
-    def search_tweets(self, tag, count):
+    def search_statuses(self, tag, count):
         querystring = urllib.parse.urlencode({'q': tag, 'count': count})
         search_path = '/search/tweets.json?%s' % querystring
         url = '%s%s' % (self.base_url, search_path)

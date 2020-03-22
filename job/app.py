@@ -28,7 +28,7 @@ twitter_api = TwitterAPI(BEARER_TOKEN)
 hashtags_array = HASHTAGS.split(';')
 
 while True:
-    insert_in_mongo_by_hashtags(hashtags_array,
+    insert_in_mongo_by_statuses(hashtags_array,
                                 twitter_api,
                                 tweets_collection, 
                                 users_collection)
