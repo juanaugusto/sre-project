@@ -22,7 +22,6 @@ services:
     command: python /app/app.py
     volumes:
       - ${PWD}/job:/app
-      - ${PWD}/clients:/app/clients
     depends_on:
       - mongo-twitter
     environment: 
