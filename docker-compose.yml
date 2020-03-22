@@ -3,41 +3,41 @@ version: '3'
 services:
 
   api:
-    build: ${PWD}/api
+    build: ./api
     command: flask run --host 0.0.0.0
     volumes:
-      - ${PWD}/api:/app
+      - ./api:/app
     depends_on:
       - mongo-twitter
     environment:
-      MONGO_ROOT_USERNAME: "${MONGO_ROOT_USERNAME}"
-      MONGO_ROOT_PASSWORD: "${MONGO_ROOT_PASSWORD}"
+      MONGO_ROOT_USERNAME: "admin"
+      MONGO_ROOT_PASSWORD: "root"
       MONGO_HOST: "mongo-twitter"
       FLASK_APP: "/app/app.py"
     ports:
       - "8080:5000"
 
   job:
-    build: ${PWD}/job
+    build: ./job
     command: python /app/app.py
     volumes:
-      - ${PWD}/job:/app
+      - ./job:/app
     depends_on:
       - mongo-twitter
     environment: 
       BEARER_TOKEN: "${BEARER_TOKEN}"
       HASHTAGS: "${HASHTAGS}"
-      MONGO_ROOT_USERNAME: "${MONGO_ROOT_USERNAME}"
-      MONGO_ROOT_PASSWORD: "${MONGO_ROOT_PASSWORD}"
+      MONGO_ROOT_USERNAME: "admin"
+      MONGO_ROOT_PASSWORD: "root"
       MONGO_HOST: "mongo-twitter"
 
   mongo-twitter:
     image: mongo:4.2.3
     volumes: 
-      - ${PWD}/mongo_twitter_data:/data/db
+      - mongo_twitter_data:/data/db
     environment:
-      MONGO_INITDB_ROOT_USERNAME: "${MONGO_ROOT_USERNAME}"
-      MONGO_INITDB_ROOT_PASSWORD: "${MONGO_ROOT_PASSWORD}"
+      MONGO_INITDB_ROOT_USERNAME: "admin"
+      MONGO_INITDB_ROOT_PASSWORD: "root"
     ports:
       - "27017:27017"
 
@@ -46,8 +46,8 @@ services:
     ports:
       - "9090:9090"
     volumes: 
-      - ${PWD}/prometheus_data:/prometheus
-      - ${PWD}/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
     depends_on: 
       - api
 
@@ -56,16 +56,18 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - ${PWD}/grafana_data:/var/lib/grafana
+      - grafana_data:/var/lib/grafana
     depends_on:
       - prometheus
 
   graylog:
     image: graylog/graylog:3.2
+    volumes:
+      - graylog_journal_data:/usr/share/graylog/data/journal
     ports:
       - "9000:9000"
-      - "12201:12201"
-      - "1514:1514"
+      - "12201:12201/udp"
+      - "1514:1514/udp"
     environment: 
       GRAYLOG_HTTP_EXTERNAL_URI: "http://127.0.0.1:9000/"
     depends_on:
@@ -74,9 +76,27 @@ services:
 
   mongo:
     image: mongo:3.6.17
+    volumes:
+      - mongo_graylog_data:/data/db
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.8.5
+    volumes: 
+      - es_graylog_data:/usr/share/elasticsearch/data
     environment: 
       http.host: "0.0.0.0"
       ES_JAVA_OPTS: "-Xms512m -Xmx512m"
+
+volumes:
+  mongo_graylog_data:
+    driver: local
+  es_graylog_data:
+    driver: local
+  graylog_journal_data:
+    driver: local
+  grafana_data:
+    driver: local
+  prometheus_data:
+    driver: local
+  mongo_twitter_data:
+    driver: local
