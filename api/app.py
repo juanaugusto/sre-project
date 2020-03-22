@@ -1,8 +1,8 @@
 import bson
 import os
 import pymongo
-import logging
 from bson.son import SON
+import logging
 from flask import Flask
 from flask import jsonify
 from flask import request
@@ -26,15 +26,12 @@ users_collection = mongo_client.twitterDB.users
 app = Flask(__name__)
 metrics = PrometheusMetrics(app)
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger()
 logger.addHandler(GelfUdpHandler(host='graylog', port=12201))
 
 @app.route("/what/users/most/followers")
 def what_users_with_most_followers():
-    # Quais são os 5 (cinco) usuários, da 
-    # amostra coletada, que possuem mais
-    # seguidores?
 
     users = users_collection.find() \
                 .sort([('user_followers_count', pymongo.DESCENDING)]) \
@@ -49,10 +46,6 @@ def what_users_with_most_followers():
 
 @app.route("/total/tweets/hour")
 def total_tweets_per_hour():
-    # Sat Mar 21 16:00:50 +0000 2020
-    # Qual o total de postagens, agrupadas
-    # por hora do dia (independentemente da
-    # hashtag)?
     
     hours = tweets_collection.aggregate([
         {"$group": {"_id": "$tweet_hour_created_at", "count": {"$sum": 1}}},
@@ -65,9 +58,6 @@ def total_tweets_per_hour():
 
 @app.route("/total/tweets/hashtag/language/location/<int:user_id>")
 def total_tweets_per_hashtag_and_language_location(user_id):
-    # Qual o total de postagens
-    # para cada uma das #tag por idioma/país do
-    # usuário que postou;
 
     user = users_collection.find_one({'user_id': user_id})
 
@@ -88,11 +78,8 @@ def total_tweets_per_hashtag_and_language_location(user_id):
 
 @app.errorhandler(404)
 def page_not_found(e):
-    # note that we set the 404 status explicitly
-    logger.info('INFO Deu 404')
-    return jsonify({}), 404
+    return jsonify({'message': 'Not Found'}), 404
 
 @app.errorhandler(500)
 def internal_server_error(e):
-    # note that we set the 404 status explicitly
-    return jsonify({}), 500
+    return jsonify({'message': 'Internal Server Error'}), 500
