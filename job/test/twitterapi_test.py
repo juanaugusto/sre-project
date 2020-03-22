@@ -2,7 +2,7 @@ import httpretty
 import json
 import unittest
 import urllib.parse
-from ..clients.twitterapi import TwitterAPI
+from clients.twitterapi import TwitterAPI
 from unittest.mock import MagicMock
 from requests.exceptions import HTTPError
 from requests.exceptions import ConnectTimeout
@@ -30,7 +30,7 @@ class TestTwitterAPI(unittest.TestCase):
         )
 
         self.assertEqual(
-            self.twitter_client.search_tweets(tag, count),
+            self.twitter_client.search_statuses(tag, count),
             json.loads(twitterapi_json_return)['statuses']
         )
 
@@ -48,9 +48,6 @@ class TestTwitterAPI(unittest.TestCase):
         )
 
         self.assertRaises(HTTPError,
-                          self.twitter_client.search_tweets,
+                          self.twitter_client.search_statuses,
                           tag, count)
     
-
-if __name__ == '__main__':
-    unittest.main()
