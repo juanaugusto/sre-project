@@ -9,14 +9,12 @@ services:
 
   test_job:
     build: ${PWD}/job
-    command: python -m unittest /app/test/twitterapi_test.py
+    command: python -m unittest test.twitterapi_test test.util_test
     volumes:
       - ${PWD}/job:/app
     depends_on:
       - mongo-twitter
     environment: 
-      BEARER_TOKEN: "${BEARER_TOKEN}"
-      HASHTAGS: "${HASHTAGS}"
       MONGO_ROOT_USERNAME: "admin"
       MONGO_ROOT_PASSWORD: "root"
       MONGO_HOST: "mongo-twitter"
