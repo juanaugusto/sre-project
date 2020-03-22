@@ -2,7 +2,7 @@ import bson
 import os
 import pymongo
 import time
-from clients.twitter.api import TwitterAPI
+from clients.twitterapi import TwitterAPI
 from dateutil.parser import parse
 
 
