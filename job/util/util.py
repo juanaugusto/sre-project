@@ -6,6 +6,13 @@ from clients.twitterapi import TwitterAPI
 from dateutil.parser import parse
 
 
+def update_user_in_mongo(user, users_collection):
+    users_collection.find_one_and_update(
+        {"_id": user['_id']}, 
+        {"$set": user}, 
+        upsert=True
+    )
+
 def insert_tweet_in_mongo(tweet, 
                           tweets_collection):
     if tweets_collection.find_one({'tweet_id': tweet['tweet_id']}) is None:
@@ -45,16 +52,12 @@ def insert_references_from_users_to_tweets_in_mongo(users,
     for user_id, tweets_ids in users.items():
 
         user = users_collection.find_one({'user_id': user_id})
-        user_object_id = user['_id']
-        del user['_id']
+        # user_object_id = user['_id']
+        # del user['_id']
         user['tweets'] += find_tweets_by_tweets_ids(tweets_ids, 
                                                     tweets_collection)
 
-        users_collection.find_one_and_update(
-            {"_id": user_object_id}, 
-            {"$set": user}, 
-            upsert=True
-        )
+        update_user_in_mongo(user, users_collection)
 
 
 def get_users_with_tweets_references(statuses):
