@@ -8,10 +8,6 @@ from requests.exceptions import HTTPError
 from requests.exceptions import ConnectTimeout
 
 
-def exception_callback(request, uri, headers):
-    raise ConnectTimeout('Connection timed out')
-
-
 class TestTwitterAPI(unittest.TestCase):
     def setUp(self):
         self.bearer_token = 'AAAAA'
