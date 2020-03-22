@@ -46,14 +46,12 @@ def find_tweets_by_tweets_ids(tweets_ids,
     return [result['_id'] for result in results]
 
 
-def insert_references_from_users_to_tweets_in_mongo(users,
+def insert_references_from_users_to_tweets_in_mongo(references,
                                                     tweets_collection,
                                                     users_collection):    
-    for user_id, tweets_ids in users.items():
+    for user_id, tweets_ids in references.items():
 
         user = users_collection.find_one({'user_id': user_id})
-        # user_object_id = user['_id']
-        # del user['_id']
         user['tweets'] += find_tweets_by_tweets_ids(tweets_ids, 
                                                     tweets_collection)
 
@@ -61,19 +59,19 @@ def insert_references_from_users_to_tweets_in_mongo(users,
 
 
 def get_users_with_tweets_references(statuses):
-    users = [{'user_id': status['user']['id'], 
-              'tweets_ids': []} 
-              for status in statuses]
+    references = [{'user_id': status['user']['id'], 
+                   'tweets_ids': []} 
+                   for status in statuses]
 
-    users = {}
+    references = {}
     for status in statuses:
-        if status['user']['id'] not in users:
-            users[status['user']['id']] = []
+        if status['user']['id'] not in references:
+            references[status['user']['id']] = []
 
     for status in statuses:
-        users[status['user']['id']] += [status['id']]   
+        references[status['user']['id']] += [status['id']]   
 
-    return users     
+    return references     
 
 
 def insert_in_mongo_by_hashtag(statuses, 
@@ -111,7 +109,7 @@ def insert_in_mongo_by_statuses(hashtags,
                                 users_collection):
     for hashtag in hashtags:
 
-        statuses = twitter_api.search_statuses(hashtag, 10)
+        statuses = twitter_api.search_statuses(hashtag, 100)
         insert_in_mongo_by_hashtag(statuses, 
                                    hashtag, 
                                    tweets_collection, 
