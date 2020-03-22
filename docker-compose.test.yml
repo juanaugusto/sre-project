@@ -1,7 +1,7 @@
 version: '3'
 
 services:
-  mongo-twitter-test:
+  mongo-twitter-test-job:
     image: mongo:4.2.3
     environment:
       MONGO_INITDB_ROOT_USERNAME: "admin"
@@ -11,15 +11,38 @@ services:
 
   test_job:
     build: ${PWD}/job
-    command: python -m unittest test.twitterapi_test test.util_test
+    command: python -m unittest test.test_twitterapi test.test_util
     volumes:
       - ${PWD}/job:/app
     depends_on:
-      - mongo-twitter-test
+      - mongo-twitter-test-job
     environment: 
       MONGO_ROOT_USERNAME: "admin"
       MONGO_ROOT_PASSWORD: "root"
-      MONGO_HOST: "mongo-twitter-test"
+      MONGO_HOST: "mongo-twitter-test-job"
+    networks:
+      - test
+
+  mongo-twitter-test-api:
+    image: mongo:4.2.3
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: "admin"
+      MONGO_INITDB_ROOT_PASSWORD: "root"
+    networks:
+      - test
+  
+  test_api:
+    build: ${PWD}/api
+    command: python -m unittest test.test_api
+    volumes:
+      - ${PWD}/api:/app
+    depends_on:
+      - mongo-twitter-test-api
+    environment: 
+      MONGO_ROOT_USERNAME: "admin"
+      MONGO_ROOT_PASSWORD: "root"
+      MONGO_HOST: "mongo-twitter-test-api"
+      FLASK_APP: "/app/app.py"
     networks:
       - test
 
