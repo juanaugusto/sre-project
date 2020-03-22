@@ -32,9 +32,9 @@ def insert_users_in_mongo(users,
 
 def find_tweets_by_tweets_ids(tweets_ids,
                               tweets_collection):
-    results = tweets_collection.find([
+    results = tweets_collection.find(
         {'tweet_id': {"$in": tweets_ids}},
-    ])
+    )
 
     return [result['_id'] for result in results]
 
@@ -107,8 +107,9 @@ def insert_in_mongo_by_statuses(hashtags,
                                 tweets_collection,
                                 users_collection):
     for hashtag in hashtags:
-        statuses = twitter_api.search_statuses(hashtag, 100)
-        insert_in_mongo_by_statuses(statuses, 
-                                    hashtag, 
-                                    tweets_collection, 
-                                    users_collection)
+
+        statuses = twitter_api.search_statuses(hashtag, 10)
+        insert_in_mongo_by_hashtag(statuses, 
+                                   hashtag, 
+                                   tweets_collection, 
+                                   users_collection)

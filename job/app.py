@@ -4,7 +4,7 @@ import pymongo
 import time
 from clients.twitterapi import TwitterAPI
 from dateutil.parser import parse
-from util.util import insert_in_mongo_by_hashtags
+from util.util import insert_in_mongo_by_statuses
 
 
 BEARER_TOKEN = os.environ['BEARER_TOKEN']
@@ -13,7 +13,7 @@ MONGO_ROOT_PASSWORD = os.environ['MONGO_ROOT_PASSWORD']
 MONGO_HOST = os.environ['MONGO_HOST']
 HASHTAGS = os.environ['HASHTAGS']
 
-time.sleep(10) # Wait Mongo DB be ready
+time.sleep(20) # Wait Mongo DB be ready
 
 mongo_client = pymongo.MongoClient('mongodb://%s:%s@%s:27017/admin' % 
                                     (MONGO_ROOT_USERNAME, 
