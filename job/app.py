@@ -32,3 +32,5 @@ while True:
                                 twitter_api,
                                 tweets_collection, 
                                 users_collection)
+
+    time.sleep(600) # Hit again the Twitter API in the next 10 minutes
