@@ -6,6 +6,8 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: "admin"
       MONGO_INITDB_ROOT_PASSWORD: "root"
+    networks:
+      - test
 
   test_job:
     build: ${PWD}/job
@@ -18,3 +20,8 @@ services:
       MONGO_ROOT_USERNAME: "admin"
       MONGO_ROOT_PASSWORD: "root"
       MONGO_HOST: "mongo-twitter-test"
+    networks:
+      - test
+
+networks:
+  test:
