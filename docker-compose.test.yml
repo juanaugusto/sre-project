@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  mongo-twitter:
+    image: mongo:4.2.3
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: "admin"
+      MONGO_INITDB_ROOT_PASSWORD: "root"
+
+  test_job:
+    build: ${PWD}/job
+    command: python -m unittest /app/test/twitterapi_test.py
+    volumes:
+      - ${PWD}/job:/app
+    depends_on:
+      - mongo-twitter
+    environment: 
+      BEARER_TOKEN: "${BEARER_TOKEN}"
+      HASHTAGS: "${HASHTAGS}"
+      MONGO_ROOT_USERNAME: "admin"
+      MONGO_ROOT_PASSWORD: "root"
+      MONGO_HOST: "mongo-twitter"

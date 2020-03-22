@@ -1,0 +1,271 @@
+{
+    "statuses": [
+        {
+            "created_at": "Sat Mar 21 20:43:34 +0000 2020",
+            "id": 1241465495666204678,
+            "id_str": "1241465495666204678",
+            "text": "RT @markekraus: Call For Authors now open for PowerShell Conference Book Volume 3. #PowerShell #DevOps #PSConfBook #PSConfBook3 https://t.c…",
+            "truncated": false,
+            "entities": {
+                "hashtags": [
+                    {
+                        "text": "PowerShell",
+                        "indices": [
+                            83,
+                            94
+                        ]
+                    },
+                    {
+                        "text": "xpto",
+                        "indices": [
+                            95,
+                            102
+                        ]
+                    },
+                    {
+                        "text": "PSConfBook",
+                        "indices": [
+                            103,
+                            114
+                        ]
+                    },
+                    {
+                        "text": "PSConfBook3",
+                        "indices": [
+                            115,
+                            127
+                        ]
+                    }
+                ],
+                "symbols": [],
+                "user_mentions": [
+                    {
+                        "screen_name": "markekraus",
+                        "name": "Mark Kraus [in]",
+                        "id": 14400311,
+                        "id_str": "14400311",
+                        "indices": [
+                            3,
+                            14
+                        ]
+                    }
+                ],
+                "urls": []
+            },
+            "metadata": {
+                "iso_language_code": "en",
+                "result_type": "recent"
+            },
+            "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+            "in_reply_to_status_id": null,
+            "in_reply_to_status_id_str": null,
+            "in_reply_to_user_id": null,
+            "in_reply_to_user_id_str": null,
+            "in_reply_to_screen_name": null,
+            "user": {
+                "id": 728849150,
+                "id_str": "728849150",
+                "name": "Ryan Yates (MVP, MBCS) #mhasl",
+                "screen_name": "ryanyates1990",
+                "location": "United Kingdom",
+                "description": "CDM MVP - PowerShell Organiser of @getpsuguk & @psdayuk & #LeedsAzure - Consultant at @blackmarble #Psychology & founder of @mhasl_me & @TimeToChange Champion",
+                "url": "https://t.co/6NRmndSEEL",
+                "entities": {
+                    "url": {
+                        "urls": [
+                            {
+                                "url": "https://t.co/6NRmndSEEL",
+                                "expanded_url": "https://blog.kilasuit.org",
+                                "display_url": "blog.kilasuit.org",
+                                "indices": [
+                                    0,
+                                    23
+                                ]
+                            }
+                        ]
+                    },
+                    "description": {
+                        "urls": []
+                    }
+                },
+                "protected": false,
+                "followers_count": 2631,
+                "friends_count": 2630,
+                "listed_count": 225,
+                "created_at": "Tue Jul 31 17:30:21 +0000 2012",
+                "favourites_count": 6043,
+                "utc_offset": null,
+                "time_zone": null,
+                "geo_enabled": true,
+                "verified": false,
+                "statuses_count": 20250,
+                "lang": null,
+                "contributors_enabled": false,
+                "is_translator": false,
+                "is_translation_enabled": false,
+                "profile_background_color": "C0DEED",
+                "profile_background_image_url": "http://abs.twimg.com/images/themes/theme1/bg.png",
+                "profile_background_image_url_https": "https://abs.twimg.com/images/themes/theme1/bg.png",
+                "profile_background_tile": false,
+                "profile_image_url": "http://pbs.twimg.com/profile_images/1223471009765957632/8JHaU6cD_normal.jpg",
+                "profile_image_url_https": "https://pbs.twimg.com/profile_images/1223471009765957632/8JHaU6cD_normal.jpg",
+                "profile_banner_url": "https://pbs.twimg.com/profile_banners/728849150/1566271835",
+                "profile_link_color": "1DA1F2",
+                "profile_sidebar_border_color": "C0DEED",
+                "profile_sidebar_fill_color": "DDEEF6",
+                "profile_text_color": "333333",
+                "profile_use_background_image": true,
+                "has_extended_profile": true,
+                "default_profile": true,
+                "default_profile_image": false,
+                "following": null,
+                "follow_request_sent": null,
+                "notifications": null,
+                "translator_type": "none"
+            },
+            "geo": null,
+            "coordinates": null,
+            "place": null,
+            "contributors": null,
+            "retweeted_status": {
+                "created_at": "Sat Mar 21 20:40:21 +0000 2020",
+                "id": 1241464688153485312,
+                "id_str": "1241464688153485312",
+                "text": "Call For Authors now open for PowerShell Conference Book Volume 3. #PowerShell #DevOps #PSConfBook #PSConfBook3 https://t.co/TLVdgSncDs",
+                "truncated": false,
+                "entities": {
+                    "hashtags": [
+                        {
+                            "text": "PowerShell",
+                            "indices": [
+                                67,
+                                78
+                            ]
+                        },
+                        {
+                            "text": "DevOps",
+                            "indices": [
+                                79,
+                                86
+                            ]
+                        },
+                        {
+                            "text": "PSConfBook",
+                            "indices": [
+                                87,
+                                98
+                            ]
+                        },
+                        {
+                            "text": "PSConfBook3",
+                            "indices": [
+                                99,
+                                111
+                            ]
+                        }
+                    ],
+                    "symbols": [],
+                    "user_mentions": [],
+                    "urls": [
+                        {
+                            "url": "https://t.co/TLVdgSncDs",
+                            "expanded_url": "https://powershell.org/2020/03/powershell-conference-book-volume-3-call-for-authors/",
+                            "display_url": "powershell.org/2020/03/powers…",
+                            "indices": [
+                                112,
+                                135
+                            ]
+                        }
+                    ]
+                },
+                "metadata": {
+                    "iso_language_code": "en",
+                    "result_type": "recent"
+                },
+                "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+                "in_reply_to_status_id": null,
+                "in_reply_to_status_id_str": null,
+                "in_reply_to_user_id": null,
+                "in_reply_to_user_id_str": null,
+                "in_reply_to_screen_name": null,
+                "user": {
+                    "id": 14400311,
+                    "id_str": "14400311",
+                    "name": "Mark Kraus [in]",
+                    "screen_name": "markekraus",
+                    "location": "Sunnyvale, CA",
+                    "description": "Former PowerShell MVP, PowerShell Core Collaborator, IT Geek, and Anime fan",
+                    "url": "https://t.co/qMT9YMrjGD",
+                    "entities": {
+                        "url": {
+                            "urls": [
+                                {
+                                    "url": "https://t.co/qMT9YMrjGD",
+                                    "expanded_url": "https://get-powershellblog.blogspot.com/",
+                                    "display_url": "get-powershellblog.blogspot.com",
+                                    "indices": [
+                                        0,
+                                        23
+                                    ]
+                                }
+                            ]
+                        },
+                        "description": {
+                            "urls": []
+                        }
+                    },
+                    "protected": false,
+                    "followers_count": 1794,
+                    "friends_count": 447,
+                    "listed_count": 54,
+                    "created_at": "Tue Apr 15 19:52:00 +0000 2008",
+                    "favourites_count": 2075,
+                    "utc_offset": null,
+                    "time_zone": null,
+                    "geo_enabled": false,
+                    "verified": false,
+                    "statuses_count": 1595,
+                    "lang": null,
+                    "contributors_enabled": false,
+                    "is_translator": false,
+                    "is_translation_enabled": false,
+                    "profile_background_color": "C0DEED",
+                    "profile_background_image_url": "http://abs.twimg.com/images/themes/theme1/bg.png",
+                    "profile_background_image_url_https": "https://abs.twimg.com/images/themes/theme1/bg.png",
+                    "profile_background_tile": false,
+                    "profile_image_url": "http://pbs.twimg.com/profile_images/1165436317028642816/zHXAJIA__normal.jpg",
+                    "profile_image_url_https": "https://pbs.twimg.com/profile_images/1165436317028642816/zHXAJIA__normal.jpg",
+                    "profile_link_color": "1DA1F2",
+                    "profile_sidebar_border_color": "C0DEED",
+                    "profile_sidebar_fill_color": "DDEEF6",
+                    "profile_text_color": "333333",
+                    "profile_use_background_image": true,
+                    "has_extended_profile": true,
+                    "default_profile": true,
+                    "default_profile_image": false,
+                    "following": null,
+                    "follow_request_sent": null,
+                    "notifications": null,
+                    "translator_type": "none"
+                },
+                "geo": null,
+                "coordinates": null,
+                "place": null,
+                "contributors": null,
+                "is_quote_status": false,
+                "retweet_count": 1,
+                "favorite_count": 1,
+                "favorited": false,
+                "retweeted": false,
+                "possibly_sensitive": false,
+                "lang": "en"
+            },
+            "is_quote_status": false,
+            "retweet_count": 1,
+            "favorite_count": 0,
+            "favorited": false,
+            "retweeted": false,
+            "lang": "en"
+        }
+    ]
+}
