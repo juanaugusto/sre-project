@@ -1,12 +1,14 @@
 import bson
 import os
 import pymongo
+import logging
 from bson.son import SON
 from flask import Flask
 from flask import jsonify
-from prometheus_client import make_wsgi_app
 from flask import request
+from prometheus_client import make_wsgi_app
 from prometheus_flask_exporter import PrometheusMetrics
+from pygelf import GelfUdpHandler
 
 
 MONGO_ROOT_USERNAME = os.environ['MONGO_ROOT_USERNAME']
@@ -24,6 +26,9 @@ users_collection = mongo_client.twitterDB.users
 app = Flask(__name__)
 metrics = PrometheusMetrics(app)
 
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger()
+logger.addHandler(GelfUdpHandler(host='graylog', port=12201))
 
 @app.route("/what/users/most/followers")
 def what_users_with_most_followers():
@@ -80,3 +85,14 @@ def total_tweets_per_hashtag_and_language_location(user_id):
                for result in results]
 
     return jsonify({'infos': counts})
+
+@app.errorhandler(404)
+def page_not_found(e):
+    # note that we set the 404 status explicitly
+    logger.info('INFO Deu 404')
+    return jsonify({}), 404
+
+@app.errorhandler(500)
+def internal_server_error(e):
+    # note that we set the 404 status explicitly
+    return jsonify({}), 500
