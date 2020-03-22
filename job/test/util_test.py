@@ -8,6 +8,8 @@ from util.util import insert_tweets_in_mongo
 from util.util import insert_users_in_mongo
 from util.util import find_tweets_by_tweets_ids
 from util.util import update_user_in_mongo
+from util.util import insert_references_from_users_to_tweets_in_mongo
+from util.util import get_users_with_tweets_references
 
 
 MONGO_ROOT_USERNAME = os.environ['MONGO_ROOT_USERNAME']
@@ -149,6 +151,43 @@ class TestJobUtil(unittest.TestCase):
                                            self.tweets_collection)
 
         self.assertEqual(len(tweets), 1)
+
+    def test_insert_references_from_users_to_tweets_in_mongo(self):
+        user = {
+            'user_id': 1,
+            'user_name': 'Test',
+            'user_followers_count': 999,
+            'user_location': 'France',
+            'tweets': []
+        }
+        tweet = {
+            'tweet_hashtag': '#xpto',
+            'tweet_id': 2,
+            'tweet_text': 'TT',
+            'tweet_hour_created_at': 23,
+            'tweet_lang': 'en'
+        }
+        insert_user_in_mongo(user, self.users_collection)
+        insert_tweet_in_mongo(tweet, self.tweets_collection)  
+
+        references = {1: [2]}
+        
+        insert_references_from_users_to_tweets_in_mongo(
+            references,
+            self.tweets_collection,
+            self.users_collection
+        )
+
+        user = list(self.users_collection.find({'user_id': 1}))[0]
+        tweet = list(self.tweets_collection.find({'tweet_id': 2}))[0]
+
+        self.assertEqual(user['tweets'], [tweet['_id']])
+
+    def test_get_users_with_tweets_references(self):
+        self.assertEqual(
+            get_users_with_tweets_references([{'user': {'id': 1}, 'id': 2}]),
+            {1: [2]}
+        )
 
     def tearDown(self):
         self.mongo_client.drop_database('twitterDB')
