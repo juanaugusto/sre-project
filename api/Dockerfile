@@ -1,9 +1,5 @@
 FROM python:3.8
 
-RUN apt-get update
-
-RUN apt-get install rsyslog -y
-
 RUN mkdir /app
 
 COPY requirements.txt /app
