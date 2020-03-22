@@ -1,7 +1,7 @@
 version: '3'
 
 services:
-  mongo-twitter:
+  mongo-twitter-test:
     image: mongo:4.2.3
     environment:
       MONGO_INITDB_ROOT_USERNAME: "admin"
@@ -13,8 +13,8 @@ services:
     volumes:
       - ${PWD}/job:/app
     depends_on:
-      - mongo-twitter
+      - mongo-twitter-test
     environment: 
       MONGO_ROOT_USERNAME: "admin"
       MONGO_ROOT_PASSWORD: "root"
-      MONGO_HOST: "mongo-twitter"
+      MONGO_HOST: "mongo-twitter-test"
