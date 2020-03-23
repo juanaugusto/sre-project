@@ -1,0 +1,16 @@
+<table>
+    <tr>
+        <th>Count</th>
+        <th>Tweet Hashtag</th>
+        <th>Tweet Lang</th>
+    </tr>
+    {% for dict_item in total_tweets_per_hashtag_and_language_location %}
+        <tr>
+        {% for key, value in dict_item.items() %}
+            {% for key1, value1 in value.items() %}
+                <td>{{ value1 }}</td>
+            {% endfor %}
+        {% endfor %}
+        </tr>
+    {% endfor %}
+</table>

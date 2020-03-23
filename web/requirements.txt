@@ -1,0 +1,4 @@
+ipdb==0.13.2
+Flask==1.1.1
+pygelf==0.3.6
+requests==2.23.0

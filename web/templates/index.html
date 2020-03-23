@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <script>
+    function loadRequest() {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("tabletomodify").innerHTML = this.responseText;
+            }
+        };
+        id_ = document.getElementById('userid').value
+        xhttp.open("GET", "/total/tweets/hashtag/language/location/" + id_, true);
+        xhttp.send();
+    }
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Index</title>
+</head>
+
+<body>
+  <h1>Simple Web Application</h1>
+
+  <p>The 5 users that have most followers:</p>
+
+  <table>
+    <tr>
+        <th>User Followers Count</th>
+        <th>User ID</th>
+        <th>Username</th>
+    </tr>
+    {% for dict_item in what_users_with_most_followers %}
+    <tr>
+    {% for key, value in dict_item.items() %}
+    <td>{{value}}</td>
+    {% endfor %}
+    </tr>
+    {% endfor %}
+  </table>
+  
+  <p>Total of tweets per hour of day:</p>
+
+  <table>
+    <tr>
+        <th>Count</th>
+        <th>Hour</th>
+    </tr>
+    {% for dict_item in total_tweets_per_hour %}
+    <tr>
+    {% for key, value in dict_item.items() %}
+    <td>{{ value }}</td>
+    {% endfor %}
+    </tr>
+    {% endfor %}
+  </table>
+
+  <p>Total of tweets per hashtag and language location</p>
+
+  Enter user id: <input type="text" name="userid" id="userid" maxlength="70" onchange="loadRequest()">
+  <table id="tabletomodify">
+
+  </table>
+</body>
+
+</html>

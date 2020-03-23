@@ -2,6 +2,19 @@ version: '3'
 
 services:
 
+  web:
+    build: ./web
+    command: flask run --host 0.0.0.0
+    volumes:
+      - ./web:/app
+    depends_on:
+      - api
+    environment:
+      HOST_API: "api"
+      FLASK_APP: "/app/app.py"
+    ports:
+      - "8090:5000"
+
   api:
     build: ./api
     command: flask run --host 0.0.0.0
