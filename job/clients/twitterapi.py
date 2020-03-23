@@ -32,8 +32,7 @@ class TwitterAPI:
 
     def search_statuses(self, tag, count):
         querystring = urllib.parse.urlencode({'q': tag, 'count': count})
-        search_path = '%s/1.1/search/tweets.json?%s' % (self.base_url, querystring)
-        url = '%s%s' % (url_search_statuses, search_path)
+        url = '%s/1.1/search/tweets.json?%s' % (self.base_url, querystring)
         
         result = requests.get(url, 
                               timeout=2, 
