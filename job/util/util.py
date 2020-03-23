@@ -54,7 +54,7 @@ def insert_references_from_users_to_tweets_in_mongo(references,
         user = users_collection.find_one({'user_id': user_id})
         user['tweets'] += find_tweets_by_tweets_ids(tweets_ids, 
                                                     tweets_collection)
-
+        user['tweets'] = list(set(user['tweets']))
         update_user_in_mongo(user, users_collection)
 
 

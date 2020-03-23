@@ -10,6 +10,7 @@ from util.util import find_tweets_by_tweets_ids
 from util.util import update_user_in_mongo
 from util.util import insert_references_from_users_to_tweets_in_mongo
 from util.util import get_users_with_tweets_references
+from util.util import insert_in_mongo_by_hashtag
 
 
 MONGO_ROOT_USERNAME = os.environ['MONGO_ROOT_USERNAME']
@@ -187,6 +188,36 @@ class TestJobUtil(unittest.TestCase):
         self.assertEqual(
             get_users_with_tweets_references([{'user': {'id': 1}, 'id': 2}]),
             {1: [2]}
+        )
+
+    def test_cannot_insert_two_equal_tweets_to_same_user(self):
+        status = {
+            'user': {
+                'id': 2,
+                'name': 'test',
+                'followers_count': 3,
+                'location': 'BR' 
+            },
+            'id': 1,
+            'text': 'Tweet text',
+            'created_at': 'Fri Feb 06 10:17:18 +0000 2015',
+            'lang': 'pt'
+        }
+
+        insert_in_mongo_by_hashtag([status], 
+                                   '#test',
+                                   self.tweets_collection,
+                                   self.users_collection)
+        insert_in_mongo_by_hashtag([status], 
+                                   '#test',
+                                   self.tweets_collection,
+                                   self.users_collection)
+
+        user = list(self.users_collection.find({'user_id': 2}))[0]
+        
+        self.assertEqual(
+            len(user['tweets']),
+            1
         )
 
     def tearDown(self):
