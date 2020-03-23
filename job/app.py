@@ -7,7 +7,8 @@ from dateutil.parser import parse
 from util.util import insert_in_mongo_by_statuses
 
 if __name__ == '__main__':
-    BEARER_TOKEN = os.environ['BEARER_TOKEN']
+    API_KEY = os.environ['API_KEY']
+    API_SECRET_KEY = os.environ['API_SECRET_KEY']
     MONGO_ROOT_USERNAME = os.environ['MONGO_ROOT_USERNAME']
     MONGO_ROOT_PASSWORD = os.environ['MONGO_ROOT_PASSWORD']
     MONGO_HOST = os.environ['MONGO_HOST']
@@ -23,7 +24,7 @@ if __name__ == '__main__':
     tweets_collection = mongo_client.twitterDB.tweets
     users_collection = mongo_client.twitterDB.users
 
-    twitter_api = TwitterAPI(BEARER_TOKEN)
+    twitter_api = TwitterAPI(API_KEY, API_SECRET_KEY)
 
     hashtags_array = HASHTAGS.split(';')
 
