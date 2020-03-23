@@ -190,7 +190,7 @@ class TestJobUtil(unittest.TestCase):
             {1: [2]}
         )
 
-    def test_cannot_insert_two_equal_tweets_to_same_user(self):
+    def test_cannot_associate_same_tweet_more_than_once_to_user(self):
         status = {
             'user': {
                 'id': 2,
