@@ -172,7 +172,7 @@ Essa aplicação faz uma consulta à todas as rotas da API REST e exibe os resul
   <img src="./docs/arquitetura.jpg" alt="Architecture image" />
 </p>
 
-Na figura acima é possível ter uma visão geral de como o projeto foi estruturado. A direção das setas indica como as aplicações e bancos de dados interagem. Por exemplo, há uma seta que aponta do Grafana para o Prometheus, indicando que o Grafana consome dados do Prometheus.
+Na figura acima é possível ter uma visão geral de como o projeto foi estruturado. A direção das setas e o rótulo indicam como as aplicações e bancos de dados interagem. Por exemplo, há uma seta que aponta do Grafana para o Prometheus com o rótulo de `Leitura`, indicando que o Grafana consome dados do Prometheus.
 
 ### Cadastro de usuários e postagens
 
