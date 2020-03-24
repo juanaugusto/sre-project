@@ -208,7 +208,7 @@ class TestJobUtil(unittest.TestCase):
         # 1 is the id of user
         self.assertEqual(
             get_users_with_tweets_references([{'user': {'id': 1}, 'id': 3},
-                                              {'user': {'id': 2}, 'id': 4} 
+                                              {'user': {'id': 2}, 'id': 4}, 
                                               {'user': {'id': 1}, 'id': 2}]),
             {1: [3, 2], 2: [4]}
         )
