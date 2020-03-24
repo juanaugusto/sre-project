@@ -51,15 +51,15 @@ No painel superior, vá em `System` e depois clique em `Inputs`. Na próxima tel
 Selecione então a opção `Global`, no campo `Title` dê um nome de sua preferência e clique no botão Save.
 
 <p align="center">
-  <img src="./docs/graylog-1.png" alt="Grafana image" />
+  <img src="./docs/graylog-1.png" alt="First Graylog image" />
 </p>
 
 <p align="center">
-  <img src="./docs/graylog-2.png" alt="Grafana image" />
+  <img src="./docs/graylog-2.png" alt="Second Graylog image" />
 </p>
 
 <p align="center">
-  <img src="./docs/graylog-3.png" alt="Grafana image" />
+  <img src="./docs/graylog-3.png" alt="Third Graylog image" />
 </p>
 
 ### Como configurar pela primeira vez o Grafana com os dashboards de monitoração da API REST
@@ -78,7 +78,7 @@ Para rodar os testes automatizados da aplicação que insere os tweets no banco 
 
 Para rodar os testes automatizados da API REST, execute o comando `docker-compose -f docker-compose.test.yml run --rm test_api` estando no diretório raiz do projeto.
 
-## Documentação da API REST
+## API REST
 
 Uma vez que o ambiente esteja de pé, a API REST estará disponível no endereço http://localhost:8080.
 
@@ -156,9 +156,56 @@ Content-Length: 36
 {"message":"Internal Server Error"}
 ```
 
-## Documentação da Aplicação Web
+## Aplicação Web
 
 A aplicação Web pode ser acessada em qualquer browser no endereço http://localhost:8090.
 
 Essa aplicação faz uma consulta à todas as rotas da API REST e exibe os resultados na mesma página. Para o caso da última rota, que obtém o total de postagens para cada uma das hashtags por idioma/país dado um usuário qualquer, há na aplicação Web um campo de texto disponível onde é possível colocar o identificador de um usuário e obter na mesma página as informações desta última rota.
 
+<p align="center">
+  <img src="./docs/web.png" alt="Web Application image" />
+</p>
+
+## Arquitetura
+
+<p align="center">
+  <img src="./docs/arquitetura.jpg" alt="Architecture image" />
+</p>
+
+Na figura acima é possível ter uma visão geral de como o projeto foi estruturado. A direção das setas indica como as aplicações e bancos de dados interagem. Por exemplo, há uma seta que aponta do Grafana para o Prometheus, indicando que o Grafana consome dados do Prometheus.
+
+### Cadastro de usuários e postagens
+
+A aplicação de coleta de postagens foi escrita em Python (versão 3.8) e é a responsável por consumir as postagens da API do Twitter dadas as hashtags informadas, e inseri-las em um banco de dados MongoDB (versão 4.2.3).
+
+<p align="center">
+  <img src="./docs/api-mongodb.jpg" alt="Architecture image" />
+</p>
+
+Para atender os requisitos necessários, o MongoDB foi modelado para ter duas coleções, uma de usuários e a outra de postagens. Um usuário pode possuir uma ou mais postagens, enquanto uma postagem necessariamente está associada a um e apenas um usuário.
+
+A coleta de postagens ocorre a cada 10 minutos para cada hashtag. Tanto as postagens como os usuários não são duplicados no MongoDB caso a API do Twitter retorne resultados idênticos em relação às coletas anteriores.
+
+### Consumo de informações relativas à usuários e postagens
+
+Para o consumo de informações relativas à usuários e postagens, uma API REST foi criada. Ela foi escrita em Python (versão 3.8) usando a biblioteca [Flask](https://palletsprojects.com/p/flask/). Os resultados são retornados sempre no formato JSON.
+
+Além disso, uma Aplicação Web foi feita para consumir esta API REST e facilitar a interação dos usuários. Também foi escrita em Python (versão 3.8) e usa a biblioteca [Flask](https://palletsprojects.com/p/flask/).
+
+O Web Server utilizado tanto na API REST, como na Aplicação Web, é o padrão que vem embutido no [Flask](https://palletsprojects.com/p/flask/) e não é adequado para ambientes de produção.
+
+### Geração e consumo de métricas de desempenho
+
+Para expor as métricas de desempenho da API REST, foi utilizada a biblioteca [prometheus_flask_exporter](https://github.com/rycus86/prometheus_flask_exporter). Seu uso é bastante simples e faz com que as métricas sejam expostas no path `/metrics` da API REST no formato entendido pelo [Prometheus](https://prometheus.io/).
+
+O [Prometheus](https://prometheus.io/) é um sistema de código aberto que coleta e armazena métricas. No caso deste projeto, o mesmo foi configurado para coletar a cada 15 segundos as métricas disponíveis no path `/metrics` da API REST e armazená-las. A versão utilizada é a 2.16.0.
+
+Uma vez que o [Prometheus](https://prometheus.io/) esteja coletando e armazenando as métricas, é possível configurá-lo como um `Data Source` no [Grafana](https://grafana.com/), e então criar os dashboards desejados. A versão do [Grafana](https://grafana.com/) é a 6.7.1
+
+### Geração e consumo de logs
+
+Para receber os logs gerados pela API REST, foi escolhido o [Graylog](https://www.graylog.org/), que é um concentrador e gerenciador de logs. Os mesmos são enviados no formato GELF (Graylog Extended Log Format) sobre UDP (podendo haver portanto perda de alguns logs).
+
+O [Graylog](https://www.graylog.org/) utiliza dois bancos de dados, um MongoDB (vale ressaltar que não é utilizada a mesma instância que a API REST consome) e um ElasticSearch. O MongoDB é utilizado apenas para armazenar informações de configuração, como por exemplo informações dos usuários. Já o Elasticsearch é o banco de dados utilizado para efetivamente armazenar os logs recebidos.
+
+Uma vez que o [Graylog](https://www.graylog.org/) esteja configurado adequadamente, é possível fazer consultas para a busca de logs específicos.
