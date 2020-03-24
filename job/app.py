@@ -14,7 +14,7 @@ if __name__ == '__main__':
     MONGO_HOST = os.environ['MONGO_HOST']
     HASHTAGS = os.environ['HASHTAGS']
 
-    time.sleep(20) # Wait Mongo DB be ready
+    time.sleep(60) # Wait Mongo DB be ready
 
     mongo_client = pymongo.MongoClient('mongodb://%s:%s@%s:27017/admin' % 
                                         (MONGO_ROOT_USERNAME, 
