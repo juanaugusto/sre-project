@@ -66,3 +66,82 @@ No canto esquerdo da tela haverá um botão (+). Clique nele e em seguida clique
 Para rodar os testes automatizados da aplicação que insere os tweets no banco de dados, execute o comando `docker-compose -f docker-compose.test.yml run --rm test_job` estando no diretório raiz do projeto.
 
 Para rodar os testes automatizados da API REST, execute o comando `docker-compose -f docker-compose.test.yml run --rm test_api` estando no diretório raiz do projeto.
+
+## Documentação da API REST
+
+Uma vez que o ambiente esteja de pé, a API REST estará disponível no endereço http://localhost:8080.
+
+### Obter os 5 usuários que mais tem seguidores
+
+#### Requisição
+
+`GET /what/users/most/followers`
+
+#### Resposta
+
+A resposta será dada em ordem decrescente da quantidade de seguidores que um usuário possui.
+
+```json
+HTTP/1.1 200 OK
+Date: Thu, 20 Mar 2020 12:36:31 GMT
+Status: 200 OK
+Connection: close
+Content-Type: application/json
+Content-Length: 74
+
+{"users":[{"user_followers_count":425435,"user_id":485475104,"user_name":"Ehi Kioya"},{"user_followers_count":338087,"user_id":1157784678,"user_name":"Microsoft Developer"}]}
+```
+
+### Obter o total de postagens agrupadas por hora do dia
+
+#### Requisição
+
+`GET /total/tweets/hour`
+
+#### Resposta
+
+A resposta será dada em ordem crescente da hora do dia.
+
+```json
+HTTP/1.1 200 OK
+Date: Thu, 20 Mar 2020 12:36:31 GMT
+Status: 200 OK
+Connection: close
+Content-Type: application/json
+Content-Length: 98
+
+{"hours":[{"count":69,"hour":0},{"count":30,"hour":1},{"count":11,"hour":2},{"count":2,"hour":3}]}
+```
+
+### Obter o total de postagens para cada uma das hashtags por idioma/país do usuário que postou
+
+#### Requisição
+
+`GET /total/tweets/hashtag/language/location/:user_id`
+
+#### Resposta
+
+Esta rota propositalmente não valida o caso em que um usuário inválido é passado para a API REST. Caso isso ocorra, o retorno será igual ao segundo exemplo desta seção.
+
+```json
+HTTP/1.1 200 OK
+Date: Thu, 20 Mar 2020 12:36:31 GMT
+Status: 200 OK
+Connection: close
+Content-Type: application/json
+Content-Length: 163
+
+{"infos":[{"tweet_info":{"count":1,"tweet_hashtag":"#openbanking","tweet_lang":"en"}},{"tweet_info":{"count":2,"tweet_hashtag":"#openbanking","tweet_lang":"pt"}}]}
+```
+
+```json
+HTTP/1.1 500 INTERNAL SERVER ERROR
+Date: Thu, 20 Mar 2020 12:36:31 GMT
+Status: 500 INTERNAL SERVER ERROR
+Connection: close
+Content-Type: application/json
+Content-Length: 36
+
+{"message":"Internal Server Error"}
+```
+
