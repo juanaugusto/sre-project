@@ -29,9 +29,7 @@ setx HASHTAGS "#openbanking"
 
 Para subir o ambiente completo, abra um terminal/prompt, vá para o diretório raiz do projeto e execute o comando `docker-compose up -d`. Feito isso, todas as aplicações ficarão disponíveis dentro de alguns segundos.
 
-Repare que a aplicação responsável por inserir a cada 10 minutos um tweet no banco, leva pouco mais de 1 minuto para começar a fazer as buscas na API do Twitter e inserir os tweets no banco de dados. Isso é feito para que haja tempo suficiente para que o banco de dados esteja de pé quando a inserção de tweets começar a ser feita. Portanto, nesse curto período, consultas feitas à API REST não retornarão quaisquer dados.
-
-Para que o envio de logs da API REST para o Graylog funcione corretamente, o Graylog deve ser configurado na primeira vez em que o ambiente for instanciado, conforme a próxima seção.
+Para que o envio de logs da API REST para o Graylog funcione corretamente, o Graylog deve ser configurado na primeira vez em que o ambiente for instanciado, conforme seção específica.
 
 Ao finalizar, não esqueça de rodar o comando `docker-compose down` na raiz do projeto.
 
@@ -41,36 +39,6 @@ Ao finalizar, não esqueça de rodar o comando `docker-compose down` na raiz do 
 * Aplicação Web - Acesso por http://localhost:8090
 * Graylog - Acesso por http://localhost:9000 
 * Grafana - Acesso por http://localhost:3000
-
-### Como configurar pela primeira vez o Graylog para receber os logs da API REST (#configurar-graylog)
-
-Em um browser qualquer, entre no endereço http://localhost:9000, preencha ambos os campos usuário e senha com o valor `admin`.
-
-No painel superior, vá em `System` e depois clique em `Inputs`. Na próxima tela, clique em `Select Input`, selecione o valor `Gelf UDP` e clique em `Launch new input`.
-
-Selecione então a opção `Global`, no campo `Title` dê um nome de sua preferência e clique no botão Save.
-
-<p align="center">
-  <img src="./docs/graylog-1.png" alt="First Graylog image" />
-</p>
-
-<p align="center">
-  <img src="./docs/graylog-2.png" alt="Second Graylog image" />
-</p>
-
-<p align="center">
-  <img src="./docs/graylog-3.png" alt="Third Graylog image" />
-</p>
-
-### Como configurar pela primeira vez o Grafana com os dashboards de monitoração da API REST
-
-Em um browser qualquer, entre no endereço http://localhost:3000, preencha ambos os campos usuário e senha com o valor `admin`.
-
-No canto esquerdo da tela haverá um botão (+). Clique nele e em seguida clique em `Import`. Após isso clique no botão `Upload .json file`, selecione o arquivo `grafana-config.json` que se encontra no diretório `grafana` deste projeto e clique em `Load`.
-
-<p align="center">
-  <img src="./docs/grafana.png" alt="Grafana image" />
-</p>
 
 ## Como rodar os testes automatizados
 
@@ -165,6 +133,74 @@ Essa aplicação faz uma consulta à todas as rotas da API REST e exibe os resul
 <p align="center">
   <img src="./docs/web.png" alt="Web Application image" />
 </p>
+
+## Como usar o Graylog
+
+### Como configurar pela primeira vez o Graylog para receber os logs da API REST
+
+Em um browser qualquer, entre no endereço http://localhost:9000, preencha ambos os campos usuário e senha com o valor `admin`.
+
+No painel superior, vá em `System` e depois clique em `Inputs`. Na próxima tela, clique em `Select Input`, selecione o valor `Gelf UDP` e clique em `Launch new input`.
+
+Selecione então a opção `Global`, no campo `Title` dê um nome de sua preferência e clique no botão Save.
+
+<p align="center">
+  <img src="./docs/graylog-1.png" alt="First Graylog image" />
+</p>
+
+<p align="center">
+  <img src="./docs/graylog-2.png" alt="Second Graylog image" />
+</p>
+
+<p align="center">
+  <img src="./docs/graylog-3.png" alt="Third Graylog image" />
+</p>
+
+## Como usar o Grafana
+
+### Como configurar pela primeira vez o Grafana com os dashboards de monitoração da API REST
+
+Em um browser qualquer, entre no endereço http://localhost:3000, preencha ambos os campos usuário e senha com o valor `admin`.
+
+Clique na roldana no menu ao lado esquerdo, depois em `Data Sources`. Depois clique em `Add data source`. 
+
+<p align="center">
+  <img src="./docs/grafana-1.png" alt="Grafana image" />
+</p>
+
+Então selecione o `Prometheus` como `Data Source`.
+
+<p align="center">
+  <img src="./docs/grafana-2.png" alt="Grafana image" />
+</p>
+
+No campo `URL` digite http://localhost:9090 e clique no botão `Save & Test`.
+
+<p align="center">
+  <img src="./docs/grafana-3.png" alt="Grafana image" />
+</p>
+
+Após isso, no canto esquerdo da tela há um botão (+). Clique nele e em seguida clique em `Import`. Após isso clique no botão `Upload .json file`, selecione o arquivo `grafana-config.json` que se encontra no diretório `grafana` deste projeto e clique em `Load`. Pronto! Clicando no símbolo do Grafana no canto superior esquerdo da tela, será possível acessar  o dashboard que acabou de ser importado.
+
+<p align="center">
+  <img src="./docs/grafana-4.png" alt="Grafana image" />
+</p>
+
+### Dashboards de Monitoração
+
+Abaixo se encontra uma imagem do dashboard de monitoração criado para este projeto. Todos usam o `Prometheus` como `Data Source`. 
+
+<p align="center">
+  <img src="./docs/grafana-5.png" alt="Grafana image" />
+</p>
+
+A seguir é feita uma explicação de como cada dashboard foi criado:
+
+* **Requests/s com sucesso** - Há um contador de requests, o qual é possível filtrar por diferente códigos de status. Logo, é possível filtrar para considerar apenas o contador de status code igual à 200 e calcular a taxa de requests/s com sucesso em intervalos de 30 segundos. 
+* **Requests/s com erro** - Há um contador de requests, o qual é possível filtrar por diferente códigos de status. Logo, é possível filtrar para considerar apenas os contadores de status code que estejam entre 500 e 599 e calcular a taxa de requests/s com erro em intervalos de 30 segundos.
+* **Tempo médio de resposta de requests com sucesso** - Através de um contador de requests e de um contador de tempos de resposta, é possível calcular o tempo médio de resposta divindo a taxa percentual de tempo que os requests levaram para completar dentro de um intervalo de 30 segundos pela quantidade de requests por segundo nesse mesmo intervalo de 30 segundos.
+* **Uso de Memória** - Há uma métrica que é atualizada a cada 15 segundos com a quantidade atual de uso de memória RAM da REST API.
+* **Uso de CPU** - Há uma métrica que é um contador e que fornece o tempo total de CPU gasto em segundos. Dessa forma é possível mensurar em intervalos de 30 segundos o percentual de tempo que a CPU está em uso.
 
 ## Arquitetura
 
