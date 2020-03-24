@@ -156,6 +156,8 @@ Selecione então a opção `Global`, no campo `Title` dê um nome de sua prefer�
   <img src="./docs/graylog-3.png" alt="Third Graylog image" />
 </p>
 
+### Exemplos de logs da REST API
+
 ## Como usar o Grafana
 
 ### Como configurar pela primeira vez o Grafana com os dashboards de monitoração da API REST
@@ -200,7 +202,7 @@ A seguir é feita uma explicação de como cada dashboard foi criado:
 * **Requests/s com erro** - Há um contador de requests, o qual é possível filtrar por diferente códigos de status. Logo, é possível filtrar para considerar apenas os contadores de status code que estejam entre 500 e 599 e calcular a taxa de requests/s com erro em intervalos de 30 segundos.
 * **Tempo médio de resposta de requests com sucesso** - Através de um contador de requests e de um contador de tempos de resposta, é possível calcular o tempo médio de resposta divindo a taxa percentual de tempo que os requests levaram para completar dentro de um intervalo de 30 segundos pela quantidade de requests por segundo nesse mesmo intervalo de 30 segundos.
 * **Uso de Memória** - Há uma métrica que é atualizada a cada 15 segundos com a quantidade atual de uso de memória RAM da REST API.
-* **Uso de CPU** - Há uma métrica que é um contador e que fornece o tempo total de CPU gasto em segundos. Dessa forma é possível mensurar em intervalos de 30 segundos o percentual de tempo que a CPU está em uso.
+* **Uso de CPU** - Há uma métrica que é um contador e que fornece o tempo total de CPU gasto em segundos. Dessa forma é possível mensurar em intervalos de 30 segundos o percentual de tempo em que a CPU está em uso.
 
 ## Arquitetura
 
