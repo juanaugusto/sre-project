@@ -1,10 +1,9 @@
-import bson
 import os
 import pymongo
 import time
 from clients.twitterapi import TwitterAPI
-from dateutil.parser import parse
 from util.util import insert_in_mongo_by_statuses
+
 
 if __name__ == '__main__':
     API_KEY = os.environ['API_KEY']
@@ -14,7 +13,8 @@ if __name__ == '__main__':
     MONGO_HOST = os.environ['MONGO_HOST']
     HASHTAGS = os.environ['HASHTAGS']
 
-    time.sleep(60) # Wait Mongo DB be ready
+    # Wait Mongo DB be ready
+    time.sleep(60)
 
     mongo_client = pymongo.MongoClient('mongodb://%s:%s@%s:27017/admin' % 
                                         (MONGO_ROOT_USERNAME, 
@@ -34,4 +34,5 @@ if __name__ == '__main__':
                                     tweets_collection, 
                                     users_collection)
 
-        time.sleep(600) # Hit again the Twitter API in the next 10 minutes
+        # Hit again the Twitter API only in the next 10 minutes
+        time.sleep(600)

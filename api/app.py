@@ -34,6 +34,8 @@ logger.addHandler(GelfUdpHandler(host='graylog', port=12201, include_extra_field
 @app.route("/what/users/most/followers")
 def what_users_with_most_followers():
     logging.info('Starting to get what user have most followers...')
+
+    # Get users in descending order of the amount of followers
     users = users_collection.find() \
                 .sort([('user_followers_count', pymongo.DESCENDING)]) \
                 .limit(5)
@@ -48,7 +50,10 @@ def what_users_with_most_followers():
 
 @app.route("/total/tweets/hour")
 def total_tweets_per_hour():
-    logging.info('Starting to get total of tweets per hour of day...')    
+    logging.info('Starting to get total of tweets per hour of day...')  
+
+    # Aggregate tweets by the hour that they were created, 
+    # and for each hour count how many tweets were created in this hour
     hours = tweets_collection.aggregate([
         {"$group": {"_id": "$tweet_hour_created_at", "count": {"$sum": 1}}},
         {"$sort": SON([("_id", +1)])}        
@@ -62,9 +67,15 @@ def total_tweets_per_hour():
 @app.route("/total/tweets/hashtag/language/location/<int:user_id>")
 def total_tweets_per_hashtag_and_language_location(user_id):
     logging.info('Starting to get total of tweets per hashtag and language location of user %s' % user_id)
+    
+    # First get the user with that has that user_id
     user = users_collection.find_one({'user_id': user_id})
     logging.debug('User %s has produced %s tweets...' % (user_id, len(user['tweets'])))
 
+    # Now, get all tweets of the user above,
+    # group them by tweet_hashtag and tweet_lang
+    # and count the amout of tweets that has the same
+    # tweet_hashtag and tweet_lang 
     results = tweets_collection.aggregate([
         {'$match': {'_id': {"$in": user['tweets']}}},
         {'$group': {"_id": {'tweet_hashtag': "$tweet_hashtag", 

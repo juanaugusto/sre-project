@@ -11,7 +11,11 @@ from requests.exceptions import ConnectTimeout
 class TestTwitterAPI(unittest.TestCase):
     
     @httpretty.activate
-    def setUp(self):        
+    def setUp(self):
+        """For each test, Twitter API client is instantiated, 
+           so before that it is always needed to mock 
+           the Bearer Token request. 
+        """
         httpretty.register_uri(
             httpretty.POST,
             'https://api.twitter.com/oauth2/token',
@@ -24,10 +28,14 @@ class TestTwitterAPI(unittest.TestCase):
         self.twitter_client = TwitterAPI(self.api_key, self.api_secret_key)
 
     def tearDown(self):
+        """After each test, reset always all HTTP mocks."""
         httpretty.reset()
 
     @httpretty.activate
     def test_twitter_api_search_statuses_when_it_return_200(self):
+        """When Twitter API returns 200 for search statuses, 
+           client method should returns OK also.
+        """
         tag = '#xpto'
         count = 1
         querystring = urllib.parse.urlencode({'q': tag, 'count': count})
@@ -49,6 +57,9 @@ class TestTwitterAPI(unittest.TestCase):
 
     @httpretty.activate
     def test_twitter_api_search_statuses_when_it_not_return_200(self):
+        """When Twitter API returns different from 200, 
+           an exception should be raised.
+        """
         tag = '#xpto2'
         count = 1
         querystring = urllib.parse.urlencode({'q': tag, 'count': count})
@@ -66,6 +77,11 @@ class TestTwitterAPI(unittest.TestCase):
 
     @httpretty.activate
     def test_generate_bearer_token_when_it_return_200(self):
+        """When Twitter API returns 200 for bearer token generation, 
+           client method should returns OK also.
+        """
+        # Because setUp() mocks the Bearer Token request before,
+        # clear all mocks and after that re-mock.
         httpretty.reset()
 
         httpretty.register_uri(
@@ -82,6 +98,10 @@ class TestTwitterAPI(unittest.TestCase):
   
     @httpretty.activate
     def test_generate_bearer_token_when_it_not_return_200(self):
+        """When Twitter API returns different from 200 for bearer 
+           token generation, an exception should be raised."""
+        # Because setUp() mocks the Bearer Token request before,
+        # clear all mocks and after that re-mock.
         httpretty.reset()
 
         httpretty.register_uri(
@@ -96,4 +116,3 @@ class TestTwitterAPI(unittest.TestCase):
                           self.api_key, 
                           self.api_secret_key
         )
-    

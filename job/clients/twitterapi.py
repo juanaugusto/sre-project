@@ -4,12 +4,16 @@ import urllib.parse
 
 
 class TwitterAPI:
+    """A Client for TwitterAPI usage."""
 
     def __init__(self, api_key, api_secret_key):
         self.base_url = 'https://api.twitter.com'
         self.bearer_token = self.generate_bearer_token(api_key, api_secret_key)
 
     def generate_bearer_token(self, api_key, api_secret_key):
+        """Takes the api_key and api_secret_key and based 
+           in them, generate the Bearer Token using Twitter API.
+        """
         url = '%s/oauth2/token' % self.base_url
 
         api_key = urllib.parse.quote(api_key)
@@ -31,6 +35,9 @@ class TwitterAPI:
         return result.json()['access_token']
 
     def search_statuses(self, tag, count):
+        """Search statuses by tag and limits the amount of results 
+           the Twitter API will return with count parameter.
+        """
         querystring = urllib.parse.urlencode({'q': tag, 'count': count})
         url = '%s/1.1/search/tweets.json?%s' % (self.base_url, querystring)
         
