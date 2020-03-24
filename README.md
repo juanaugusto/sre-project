@@ -9,6 +9,8 @@ Feito isso, você irá precisar configurar três variáveis de ambiente:
 * `API_KEY` e `API_SECRET_KEY` - Estas duas chaves são necessárias para fazer buscas por tweets usando a API do Twitter. Entre em https://developer.twitter.com e siga o passo a passo para obtê-las. 
 * `HASHTAGS` - Aqui você irá informar as hashtags que a aplicação que insere os tweets no Banco de Dados irá utilizar separadas pelo caracter `;`.
 
+Exemplos:
+
 ```bash
 # Ambientes Unix-like (Linux e MacOS)
 export API_KEY="ADJGHGHHGHG"
@@ -25,13 +27,22 @@ setx HASHTAGS "#openbanking;#apifirst;#devops"
 setx HASHTAGS "#openbanking"
 ```
 
-Para subir as aplicações, abra um terminal/prompt, vá para o diretório raiz do projeto e execute o comando `docker-compose up -d`. Feito isso, todas as aplicações ficarão disponíveis dentro de alguns segundos.
+Para subir o ambiente completo, abra um terminal/prompt, vá para o diretório raiz do projeto e execute o comando `docker-compose up -d`. Feito isso, todas as aplicações ficarão disponíveis dentro de alguns segundos.
 
-Repare que a aplicação responsável por inserir a cada 10 minutos um tweet no banco, leva pouco mais de 1 minuto para começar a fazer as buscas na API do Twitter e inserir os tweets no banco de dados. Isso é feito para que haja tempo suficiente para que o banco de dados esteja de pé quando a inserção de tweets começar a ser feita.
+Repare que a aplicação responsável por inserir a cada 10 minutos um tweet no banco, leva pouco mais de 1 minuto para começar a fazer as buscas na API do Twitter e inserir os tweets no banco de dados. Isso é feito para que haja tempo suficiente para que o banco de dados esteja de pé quando a inserção de tweets começar a ser feita. Portanto, nesse curto período, consultas feitas à API REST não retornarão quaisquer dados.
+
+Para que o envio de logs da API REST para o Graylog funcione corretamente, o Graylog deve ser configurado na primeira vez em que o ambiente for instanciado, conforme a próxima seção.
 
 Ao finalizar, não esqueça de rodar o comando `docker-compose down` na raiz do projeto.
 
-### Como configurar pela primeira vez o Graylog para receber os logs da API REST
+### Endpoints disponíveis para acesso
+
+* API REST - Acesso por http://localhost:8080
+* Aplicação Web - Acesso por http://localhost:8090
+* Graylog - Acesso por http://localhost:9000 
+* Grafana - Acesso por http://localhost:3000
+
+### Como configurar pela primeira vez o Graylog para receber os logs da API REST (#configurar-graylog)
 
 Em um browser qualquer, entre no endereço http://localhost:9000, preencha ambos os campos usuário e senha com o valor `admin`.
 
@@ -121,7 +132,7 @@ Content-Length: 98
 
 #### Resposta
 
-Esta rota propositalmente não valida o caso em que um usuário inválido é passado para a API REST. Caso isso ocorra, o retorno será igual ao segundo exemplo desta seção.
+Esta rota propositalmente não valida o caso em que o `user_id` não existe no banco de dados. Caso isso ocorra, o retorno será igual ao segundo exemplo desta seção.
 
 ```json
 HTTP/1.1 200 OK
@@ -144,4 +155,10 @@ Content-Length: 36
 
 {"message":"Internal Server Error"}
 ```
+
+## Documentação da Aplicação Web
+
+A aplicação Web pode ser acessada em qualquer browser no endereço http://localhost:8090.
+
+Essa aplicação faz uma consulta à todas as rotas da API REST e exibe os resultados na mesma página. Para o caso da última rota, que obtém o total de postagens para cada uma das hashtags por idioma/país dado um usuário qualquer, há na aplicação Web um campo de texto disponível onde é possível colocar o identificador de um usuário e obter na mesma página as informações desta última rota.
 
