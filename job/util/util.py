@@ -6,6 +6,25 @@ from clients.twitterapi import TwitterAPI
 from dateutil.parser import parse
 
 
+def get_mongo_client(MONGO_ROOT_USERNAME, 
+                     MONGO_ROOT_PASSWORD, 
+                     MONGO_HOST):
+    """Gets mongo client up until it is available."""
+    # Retrying up until Mongo is available
+    while True:
+        try:
+            mongo_client = pymongo.MongoClient(
+                           'mongodb://%s:%s@%s:27017/admin' % 
+                           (MONGO_ROOT_USERNAME, 
+                            MONGO_ROOT_PASSWORD, 
+                            MONGO_HOST),
+                            serverSelectionTimeoutMS=4000)
+            mongo_client.server_info()
+            return mongo_client
+        except:
+            print('Retrying Mongo connection...')
+
+
 def update_user_in_mongo(user, users_collection):
     """Updates only one user in Mongo."""
     users_collection.find_one_and_update(
@@ -13,6 +32,7 @@ def update_user_in_mongo(user, users_collection):
         {"$set": user}, 
         upsert=True
     )
+
 
 def insert_tweet_in_mongo(tweet, 
                           tweets_collection):

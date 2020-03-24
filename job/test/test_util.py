@@ -11,6 +11,7 @@ from util.util import update_user_in_mongo
 from util.util import insert_references_from_users_to_tweets_in_mongo
 from util.util import get_users_with_tweets_references
 from util.util import insert_in_mongo_by_hashtag
+from util.util import get_mongo_client
 
 
 MONGO_ROOT_USERNAME = os.environ['MONGO_ROOT_USERNAME']
@@ -22,11 +23,11 @@ class TestJobUtil(unittest.TestCase):
     def setUp(self):
         """For each test, ensure that database was dropped before.
         """
-        self.mongo_client = pymongo.MongoClient(
-                                'mongodb://%s:%s@%s:27017/admin' % 
-                                (MONGO_ROOT_USERNAME, 
-                                 MONGO_ROOT_PASSWORD, 
-                                 MONGO_HOST))
+        self.mongo_client = get_mongo_client(
+                                MONGO_ROOT_USERNAME, 
+                                MONGO_ROOT_PASSWORD, 
+                                MONGO_HOST
+                            )
         
         # Ensure also that DB not exists before starting to Test
         self.mongo_client.drop_database('twitterDB')
@@ -39,6 +40,18 @@ class TestJobUtil(unittest.TestCase):
         """After each test, ensure that database was dropped.
         """
         self.mongo_client.drop_database('twitterDB')
+
+    def test_can_get_mongo_client(self):
+        """Test that can get mongo client and it responds."""
+        mongo_client = get_mongo_client(
+                            MONGO_ROOT_USERNAME, 
+                            MONGO_ROOT_PASSWORD, 
+                            MONGO_HOST
+                       )
+        self.assertEqual(
+            mongo_client.server_info()['version'],
+            '4.2.3'
+        )
 
     def test_insert_one_tweet_in_mongo(self):
         """Test that can insert one tweet in Mongo."""
