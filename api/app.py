@@ -2,6 +2,8 @@ import bson
 import logging
 import os
 import pymongo
+import time
+import random
 from bson.son import SON
 from flask import Flask
 from flask import jsonify
@@ -35,6 +37,9 @@ logger.addHandler(GelfUdpHandler(host='graylog', port=12201, include_extra_field
 def what_users_with_most_followers():
     logging.info('Starting to get what user have most followers...')
 
+    # Purposefully generate a delay in response
+    time.sleep(random.random() * 0.6)
+
     # Get users in descending order of the amount of followers
     users = users_collection.find() \
                 .sort([('user_followers_count', pymongo.DESCENDING)]) \
@@ -52,6 +57,9 @@ def what_users_with_most_followers():
 def total_tweets_per_hour():
     logging.info('Starting to get total of tweets per hour of day...')  
 
+    # Purposefully generate a delay in response
+    time.sleep(random.random() * 0.9)
+
     # Aggregate tweets by the hour that they were created, 
     # and for each hour count how many tweets were created in this hour
     hours = tweets_collection.aggregate([
@@ -67,6 +75,9 @@ def total_tweets_per_hour():
 @app.route("/total/tweets/hashtag/language/location/<int:user_id>")
 def total_tweets_per_hashtag_and_language_location(user_id):
     logging.info('Starting to get total of tweets per hashtag and language location of user %s' % user_id)
+
+    # Purposefully generate a delay in response
+    time.sleep(random.random() * 0.5)
     
     # First get the user with that has that user_id
     user = users_collection.find_one({'user_id': user_id})
