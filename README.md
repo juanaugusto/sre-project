@@ -142,7 +142,7 @@ Em um browser qualquer, entre no endereço http://localhost:9000, preencha ambos
 
 No painel superior, vá em `System` e depois clique em `Inputs`. Na próxima tela, clique em `Select Input`, selecione o valor `Gelf UDP` e clique em `Launch new input`.
 
-Selecione então a opção `Global`, no campo `Title` dê um nome de sua preferência e clique no botão Save.
+Selecione então a opção `Global`, no campo `Title` dê um nome de sua preferência e clique no botão Save. Para começar a buscar logs, clique no botão `Search` na parte superior da tela.
 
 <p align="center">
   <img src="./docs/graylog-1.png" alt="First Graylog image" />
@@ -156,7 +156,19 @@ Selecione então a opção `Global`, no campo `Title` dê um nome de sua prefer�
   <img src="./docs/graylog-3.png" alt="Third Graylog image" />
 </p>
 
-### Exemplos de logs da REST API
+### Exemplos de logs vindos da REST API
+
+Na figura abaixo podemos ver um exemplo de dois logs, um produzido pela própria biblioteca `Flask` de nível 6 (INFO) e outro produzido por código da própria API de nível 4 (WARNING).
+
+<p align="center">
+  <img src="./docs/graylog-4.png" alt="Third Graylog image" />
+</p>
+
+Na próxima figura é possível ver outro log, produzido também pela biblioteca `Flask` de nível 3 (ERROR). Nele está contido todo o `Stack Trace` de uma chamada à REST API e que acabou ocasionando uma exceção que não está sendo tratada no código.
+
+<p align="center">
+  <img src="./docs/graylog-5.png" alt="Third Graylog image" />
+</p>
 
 ## Como usar o Grafana
 
