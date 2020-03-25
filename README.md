@@ -20,7 +20,7 @@ export HASHTAGS="#openbanking"
 ```
 
 ```dos
-% Ambiente Windows
+% Ambiente Windows (PowerShell)
 setx API_KEY "ADJGHGHHGHG"
 setx API_SECRET_KEY "FFFSFDDFDG"
 setx HASHTAGS "#openbanking;#apifirst;#devops"
