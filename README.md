@@ -29,6 +29,8 @@ setx HASHTAGS "#openbanking"
 
 Para subir o ambiente completo, abra um terminal/prompt, vá para o diretório raiz do projeto e execute o comando `docker-compose up -d`. Feito isso, o mesmo ficará disponível dentro de alguns segundos.
 
+**IMPORTANTE** - Caso o container do Elasticsearch (banco de dados do Graylog) não suba em uma distribuição Unix, verifique se o parâmetro do kernel `vm.max_map_count` está setado em um valor igual ou superior à 262144. Para setar esse valor, rode o comando `sysctl vm.max_map_count=262144` com permissões de `root`.
+
 Ao finalizar, não esqueça de rodar o comando `docker-compose down` estando no diretório raiz do projeto.
 
 ### Endpoints disponíveis para acesso
