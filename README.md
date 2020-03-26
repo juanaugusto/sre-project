@@ -186,7 +186,7 @@ Então selecione o `Prometheus` como `Data Source`.
   <img src="./docs/grafana-2.png" alt="Grafana image" />
 </p>
 
-No campo `URL` digite http://localhost:9090 e clique no botão `Save & Test`.
+No campo `URL` digite http://prometheus:9090 e clique no botão `Save & Test`.
 
 <p align="center">
   <img src="./docs/grafana-3.png" alt="Grafana image" />
